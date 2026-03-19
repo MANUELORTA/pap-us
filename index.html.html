@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Consulta PAP – Universidad de Sevilla</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --oscuro: #1a0e06;
+  --marron: #2c1a0a;
+  --dorado: #c9a84c;
+  --dorado-claro: #e8c97e;
+  --rojo: #8b1a1a;
+  --tostado: #8b4513;
+  --bg: #f5f4f0;
+  --blanco: #ffffff;
+  --gris: #6b7280;
+  --gris-claro: #f0efe9;
+  --radio: 12px;
+}
+
+body {
+  font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: #222;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ── HEADER ── */
+header {
+  background: linear-gradient(135deg, #1a1a1a 0%, var(--marron) 50%, var(--oscuro) 100%);
+  color: #fff;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.45);
+}
+
+.logo-us {
+  height: 56px;
+  width: auto;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 6px rgba(0,0,0,0.5));
+}
+
+.header-text {
+  flex: 1;
+  min-width: 0;
+}
+.header-text h1 {
+  font-size: clamp(0.95rem, 3.5vw, 1.35rem);
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.header-text p {
+  font-size: clamp(0.72rem, 2.5vw, 0.85rem);
+  color: var(--dorado-claro);
+  margin-top: 3px;
+}
+
+.header-badge {
+  background: rgba(201,168,76,0.22);
+  border: 1px solid rgba(201,168,76,0.5);
+  color: var(--dorado-claro);
+  font-size: 0.75rem;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* ── MAIN ── */
+main {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 20px 14px 40px;
+}
+
+/* ── SEARCH CARD ── */
+.search-card {
+  background: var(--blanco);
+  border-radius: var(--radio);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  padding: 22px 18px;
+  border: 1px solid rgba(139,69,19,0.1);
+}
+
+.search-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--tostado);
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.search-subtitle {
+  color: var(--gris);
+  font-size: 0.83rem;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+/* Input + botón en columna en móvil */
+.input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (min-width: 480px) {
+  .input-row {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+.dni-input {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1.15rem;
+  border: 2px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+  letter-spacing: 0.06em;
+  color: #111;
+  background: #fafaf8;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+}
+.dni-input:focus {
+  border-color: var(--tostado);
+  box-shadow: 0 0 0 3px rgba(139,69,19,0.12);
+  background: #fff;
+}
+.dni-input::placeholder { color: #bbb; }
+
+.btn-buscar {
+  width: 100%;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, var(--tostado), var(--dorado));
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.15s, box-shadow 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.btn-buscar:active { opacity: 0.85; }
+
+@media (min-width: 480px) {
+  .btn-buscar {
+    width: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
+.btn-limpiar {
+  width: 100%;
+  padding: 11px;
+  background: #f3f4f6;
+  color: var(--gris);
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: none;
+  transition: all 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-limpiar:active { background: #fee2e2; color: #dc2626; }
+
+@media (min-width: 480px) {
+  .btn-limpiar {
+    width: auto;
+    padding: 14px 16px;
+    flex-shrink: 0;
+  }
+}
+
+.error-msg {
+  display: none;
+  margin-top: 12px;
+  background: #fff1f1;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: #b91c1c;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  align-items: flex-start;
+  gap: 9px;
+}
+.error-msg svg { flex-shrink: 0; margin-top: 1px; }
+
+/* ── RESULT CARD ── */
+.result-card {
+  display: none;
+  margin-top: 20px;
+  background: var(--blanco);
+  border-radius: var(--radio);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  overflow: hidden;
+  border: 1px solid rgba(139,69,19,0.1);
+  animation: slideUp 0.3s ease both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.result-header {
+  background: linear-gradient(135deg, var(--marron) 0%, var(--oscuro) 100%);
+  color: #fff;
+  padding: 18px 20px;
+}
+.result-nombre {
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-weight: 700;
+  margin-bottom: 6px;
+  line-height: 1.3;
+  word-break: break-word;
+}
+.result-dni-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.15);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Total box */
+.total-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  background: linear-gradient(90deg, #fdf6e3, #f9edcc);
+  border-bottom: 1px solid #e8d5a0;
+  flex-wrap: wrap;
+}
+.total-label {
+  font-size: 0.8rem;
+  color: var(--tostado);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.total-unit-text {
+  font-size: 0.78rem;
+  color: #b8860b;
+  margin-top: 2px;
+}
+.total-value {
+  font-size: clamp(1.7rem, 6vw, 2.2rem);
+  font-weight: 900;
+  color: var(--rojo);
+  line-height: 1;
+}
+.total-creditos-label {
+  font-size: 0.75rem;
+  color: #b8860b;
+  text-align: right;
+}
+
+/* Tabla de conceptos */
+.conceptos-section {
+  padding: 16px 16px 20px;
+}
+.conceptos-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--gris);
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* En móvil: tabla como tarjetas */
+.concepto-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0efe9;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.concepto-item:last-child { border-bottom: none; }
+
+.concepto-desc {
+  font-size: 0.88rem;
+  color: #333;
+  line-height: 1.35;
+}
+.concepto-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.bar-bg {
+  flex: 1;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--dorado), var(--tostado));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+.concepto-creditos {
+  font-weight: 800;
+  color: var(--rojo);
+  font-size: 0.92rem;
+  white-space: nowrap;
+  min-width: 40px;
+  text-align: right;
+}
+
+.cod-badge {
+  display: inline-block;
+  background: #fdf0d5;
+  color: var(--tostado);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 4px;
+  margin-right: 5px;
+  font-family: monospace;
+  vertical-align: middle;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  color: var(--gris);
+  font-size: 0.75rem;
+  padding: 10px 16px 24px;
+  line-height: 1.6;
+}
+footer strong { color: var(--tostado); }
+
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.75); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.anim-num { animation: countUp 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+</style>
+</head>
+<body>
+
+<header>
+  <img class="logo-us" src="data:image/png;base64,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" alt="Dpto. Contabilidad y Economía Financiera">
+  <div class="header-text">
+    <h1>Plan de Asignación de Profesorado</h1>
+    <p>Dpto. Contabilidad y Economía Financiera · US</p>
+  </div>
+  <div class="header-badge">2026–27</div>
+</header>
+
+<main>
+  <div class="search-card">
+    <div class="search-title">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Consulta tu informe PAP
+    </div>
+    <p class="search-subtitle">Introduce tu DNI (solo números, sin letra) para ver tus reducciones asignadas.</p>
+
+    <div class="input-row">
+      <input
+        type="tel"
+        id="dniInput"
+        class="dni-input"
+        placeholder="Ej: 28567123"
+        maxlength="12"
+        autocomplete="off"
+        inputmode="numeric"
+        pattern="[0-9]*"
+      />
+      <button class="btn-buscar" id="btnBuscar">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Consultar
+      </button>
+      <button class="btn-limpiar" id="btnLimpiar">✕ Limpiar</button>
+    </div>
+
+    <div class="error-msg" id="errorMsg">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="errorText"></span>
+    </div>
+  </div>
+
+  <div class="result-card" id="resultCard">
+    <div class="result-header">
+      <div class="result-nombre" id="rNombre">—</div>
+      <div class="result-dni-badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="12" y2="13"/></svg>
+        DNI: <span id="rDNI">—</span>
+      </div>
+    </div>
+
+    <div class="total-box">
+      <div>
+        <div class="total-label">Total créditos PAP</div>
+        <div class="total-unit-text">Suma de todos los conceptos</div>
+      </div>
+      <div>
+        <div class="total-value anim-num" id="rTotal">0</div>
+        <div class="total-creditos-label">créditos</div>
+      </div>
+    </div>
+
+    <div class="conceptos-section">
+      <div class="conceptos-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Desglose por concepto
+      </div>
+      <div id="rTabla"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <strong>Departamento de Contabilidad y Economía Financiera</strong> · Universidad de Sevilla<br>
+  Plan de Asignación de Profesorado (PAP) · Curso 2026–27
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+const DATOS = {
+  "29758235":{"nombre":"ORTA PEREZ, MANUEL","dni":"29758235","total_creditos":15.0,"conceptos":[{"reduccion":"9000000 DIRECCIÓN DEPARTAMENTO","creditos":5.0},{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9050002 OTRAS PRÁCTICAS","creditos":2.0},{"reduccion":"9010000 Dirección TFG","creditos":4.0}]},
+  "52287427":{"nombre":"HERNANDEZ BORREGUERO, JOSE JULIAN","dni":"52287427","total_creditos":12.2,"conceptos":[{"reduccion":"9000001 SECRETARIO DEPERTAMENTO","creditos":2.0},{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":1.0},{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9050002 OTRAS PRÁCTICAS","creditos":1.2},{"reduccion":"9010000 Dirección TFG","creditos":4.0}]},
+  "28567123":{"nombre":"CARRASCO GALLEGO, AMALIA","dni":"28567123","total_creditos":12.5,"conceptos":[{"reduccion":"9000002 DIRECCIÓN TESIS","creditos":1.5},{"reduccion":"9000003 COORDINACIÓN MASTER","creditos":2.0},{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9050002 OTRAS PRÁCTICAS","creditos":1.0},{"reduccion":"9010000 Dirección TFG","creditos":3.5}]},
+  "45654774":{"nombre":"PEREZ LOPEZ, AURORA VIRGINIA","dni":"45654774","total_creditos":4.85,"conceptos":[{"reduccion":"9000002 DIRECCIÓN TESIS","creditos":0.75},{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":1.0},{"reduccion":"9020000 PRÁCTICAS","creditos":0.6},{"reduccion":"9010000 Dirección TFG","creditos":2.5}]},
+  "28888673":{"nombre":"PEREZ LOPEZ, JOSE ANGEL","dni":"28888673","total_creditos":19.65,"conceptos":[{"reduccion":"9000002 DIRECCIÓN TESIS","creditos":2.25},{"reduccion":"9000005 CARGO ACADÉMICO","creditos":12.0},{"reduccion":"9010001 Dirección TFM","creditos":2.4},{"reduccion":"9010000 Dirección TFG","creditos":3.0}]},
+  "52221955":{"nombre":"REGUERA ALVARADO, NURIA","dni":"52221955","total_creditos":12.45,"conceptos":[{"reduccion":"9000002 DIRECCIÓN TESIS","creditos":0.75},{"reduccion":"9000003 COORDINACIÓN MASTER","creditos":2.0},{"reduccion":"9000007 DOCENCIA EN INGLES","creditos":1.0},{"reduccion":"9020000 PRÁCTICAS","creditos":1.0},{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9050002 OTRAS PRÁCTICAS","creditos":0.2},{"reduccion":"9010000 Dirección TFG","creditos":3.5}]},
+  "28907173":{"nombre":"MUÑOZ USABIAGA, MARIA ARANZAZU","dni":"28907173","total_creditos":3.5,"conceptos":[{"reduccion":"9000003 COORDINACIÓN MASTER","creditos":2.0},{"reduccion":"9000007 DOCENCIA EN INGLES","creditos":1.5}]},
+  "77813928":{"nombre":"MIRAS RODRIGUEZ, M. MAR","dni":"77813928","total_creditos":5.465,"conceptos":[{"reduccion":"9000003 COORDINACIÓN MASTER","creditos":2.0},{"reduccion":"9000007 DOCENCIA EN INGLES","creditos":1.5},{"reduccion":"9020000 PRÁCTICAS","creditos":0.6},{"reduccion":"9010001 Dirección TFM","creditos":1.33},{"reduccion":"9050002 OTRAS PRÁCTICAS","creditos":0.035}]},
+  "52264378":{"nombre":"ARQUERO MONTAÑO, JOSE LUIS","dni":"52264378","total_creditos":6.5,"conceptos":[{"reduccion":"9000005 CARGO ACADÉMICO","creditos":6.0},{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5}]},
+  "28741805":{"nombre":"AGUSTI PEREZ, MARIA DE LAS AGUAS","dni":"28741805","total_creditos":9.74,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9010001 Dirección TFM","creditos":2.4},{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9050002 OTRAS PRÁCTICAS","creditos":0.34},{"reduccion":"9010000 Dirección TFG","creditos":2.5}]},
+  "28911422":{"nombre":"COLOMER HERNANDEZ, SEGISMUNDO","dni":"28911422","total_creditos":0.825,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9000007 DOCENCIA EN INGLES","creditos":0.325}]},
+  "28762482":{"nombre":"CONTRERAS MANRIQUE, MIGUEL","dni":"28762482","total_creditos":4.0,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":1.0},{"reduccion":"9010000 Dirección TFG","creditos":3.0}]},
+  "28714386":{"nombre":"OÑATE RODRIGUEZ DE LA BORBOLLA, MYRIAM","dni":"28714386","total_creditos":0.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5}]},
+  "30224100":{"nombre":"DELGADO JIMENEZ, JOSE MANUEL","dni":"30224100","total_creditos":3.0,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9010000 Dirección TFG","creditos":2.5}]},
+  "28583127":{"nombre":"DIAZ DE MAYORGA CORDON, CARLOS","dni":"28583127","total_creditos":2.0,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9000009 DOCENCIA > 110","creditos":1.0},{"reduccion":"9010000 Dirección TFG","creditos":0.5}]},
+  "27281752":{"nombre":"DUARTE ATOCHE, M. TERESA","dni":"27281752","total_creditos":7.0,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":1.0},{"reduccion":"9020000 PRÁCTICAS","creditos":1.0},{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9010000 Dirección TFG","creditos":1.0}]},
+  ".8831074":{"nombre":"GARCIA AYUSO, MANUEL","dni":".8831074","total_creditos":5.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":1.5},{"reduccion":"9010000 Dirección TFG","creditos":4.0}]},
+  "44037538":{"nombre":"JULIA ACOSTA , JUSTO","dni":"44037538","total_creditos":0.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5}]},
+  "27280333":{"nombre":"MARTIN LOZANO, FRANCISCO JAVIER","dni":"27280333","total_creditos":2.0,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9000007 DOCENCIA EN INGLES","creditos":1.5}]},
+  "27303646":{"nombre":"MIRON MURCIANO, PEDRO JESUS","dni":"27303646","total_creditos":0.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5}]},
+  "48855589":{"nombre":"MONTERO BANCALERO, MARIA DEL CARMEN","dni":"48855589","total_creditos":2.0,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9010000 Dirección TFG","creditos":1.5}]},
+  "49560296":{"nombre":"MORENO UREBA, ELENA","dni":"49560296","total_creditos":3.6,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9000007 DOCENCIA EN INGLES","creditos":1.5},{"reduccion":"9010001 Dirección TFM","creditos":1.6}]},
+  "28735051":{"nombre":"MUÑOZ RUBIO, ANA MARIA","dni":"28735051","total_creditos":13.0,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9020000 PRÁCTICAS","creditos":0.8},{"reduccion":"9010001 Dirección TFM","creditos":3.2},{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9050002 OTRAS PRÁCTICAS","creditos":1.0},{"reduccion":"9010000 Dirección TFG","creditos":1.0},{"reduccion":"9010000 Dirección TFG","creditos":2.5}]},
+  "27300737":{"nombre":"NUÑEZ TORRADO, MIRIAM","dni":"27300737","total_creditos":4.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":1.0},{"reduccion":"9000007 DOCENCIA EN INGLES","creditos":1.5},{"reduccion":"9020000 PRÁCTICAS","creditos":1.0},{"reduccion":"9010000 Dirección TFG","creditos":1.0}]},
+  "29608770":{"nombre":"OLIVA RODRIGUEZ, LAURA","dni":"29608770","total_creditos":2.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9010000 Dirección TFG","creditos":2.0}]},
+  "28886902":{"nombre":"OSTOS PEREZ, NURIA","dni":"28886902","total_creditos":3.0,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9010000 Dirección TFG","creditos":2.5}]},
+  "15408573":{"nombre":"PEREZ SALGADO, MARIA","dni":"15408573","total_creditos":0.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5}]},
+  "28900759":{"nombre":"RUEDA TORRES, JUAN ANTONIO","dni":"28900759","total_creditos":6.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9010000 Dirección TFG","creditos":2.0}]},
+  "21457705":{"nombre":"RUIZ ALBERT, IGNACIO","dni":"21457705","total_creditos":2.0,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9010000 Dirección TFG","creditos":1.5}]},
+  "28597841":{"nombre":"SANCHEZ SUAREZ, ENRIQUE","dni":"28597841","total_creditos":0.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5}]},
+  "28885425":{"nombre":"SERRANO DOMINGUEZ, FRANCISCO","dni":"28885425","total_creditos":9.4,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9020000 PRÁCTICAS","creditos":1.2},{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9050002 OTRAS PRÁCTICAS","creditos":0.2},{"reduccion":"9010000 Dirección TFG","creditos":3.5}]},
+  "28917016":{"nombre":"SORIANO MARTIN, ERNESTO","dni":"28917016","total_creditos":1.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9000009 DOCENCIA > 110","creditos":1.0}]},
+  "44035747":{"nombre":"VELEZ ELORZA, MARIA FERNANDA","dni":"44035747","total_creditos":0.7,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9020000 PRÁCTICAS","creditos":0.2}]},
+  "27286806":{"nombre":"VILLACHICA LOPEZ, MARIA ROSA","dni":"27286806","total_creditos":1.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5},{"reduccion":"9010000 Dirección TFG","creditos":1.0}]},
+  "52567552":{"nombre":"VIOLETA SALIDO, MARIA ISABEL","dni":"52567552","total_creditos":0.5,"conceptos":[{"reduccion":"9000008 DOCENCIA > 65 < 110","creditos":0.5}]},
+  "28909933":{"nombre":"CAMPOS LUCENA, MARIA SOLEDAD","dni":"28909933","total_creditos":4.3,"conceptos":[{"reduccion":"9000009 DOCENCIA > 110","creditos":1.0},{"reduccion":"9020000 PRÁCTICAS","creditos":0.8},{"reduccion":"9010000 Dirección TFG","creditos":2.5}]},
+  "28572386":{"nombre":"DONOSO ANES, ALBERTO","dni":"28572386","total_creditos":4.0,"conceptos":[{"reduccion":"9000009 DOCENCIA > 110","creditos":1.0},{"reduccion":"9010000 Dirección TFG","creditos":3.0}]},
+  "52262305":{"nombre":"FUENTES RUIZ, MARIA DEL PILAR DE","dni":"52262305","total_creditos":3.5,"conceptos":[{"reduccion":"9000009 DOCENCIA > 110","creditos":2.0},{"reduccion":"9000007 DOCENCIA EN INGLES","creditos":1.5}]},
+  "28921335":{"nombre":"GONZALEZ GONZALEZ, JOSE MARIA","dni":"28921335","total_creditos":4.4,"conceptos":[{"reduccion":"9000009 DOCENCIA > 110","creditos":2.0},{"reduccion":"9050002 OTRAS PRÁCTICAS","creditos":0.4},{"reduccion":"9010000 Dirección TFG","creditos":2.0}]},
+  "52696922":{"nombre":"JIMENEZ JIMENEZ, CARLOS","dni":"52696922","total_creditos":1.0,"conceptos":[{"reduccion":"9000009 DOCENCIA > 110","creditos":1.0}]},
+  "28603766":{"nombre":"VIZCAINO FERNANDEZ, ANGELA","dni":"28603766","total_creditos":1.0,"conceptos":[{"reduccion":"9000009 DOCENCIA > 110","creditos":1.0}]},
+  "29498195":{"nombre":"ALCAIDE, MARIA DOLORES","dni":"29498195","total_creditos":2.0,"conceptos":[{"reduccion":"9000007 DOCENCIA EN INGLES","creditos":2.0}]},
+  "28639583":{"nombre":"BRAVO URQUIZA, FRANCISCO","dni":"28639583","total_creditos":9.94,"conceptos":[{"reduccion":"9000007 DOCENCIA EN INGLES","creditos":3.0},{"reduccion":"9020000 PRÁCTICAS","creditos":0.6},{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9050002 OTRAS PRÁCTICAS","creditos":0.34},{"reduccion":"9010000 Dirección TFG","creditos":2.0}]},
+  "75431952":{"nombre":"LOBO GALLARDO, ANTONIO","dni":"75431952","total_creditos":3.0,"conceptos":[{"reduccion":"9000007 DOCENCIA EN INGLES","creditos":3.0}]},
+  "32673205":{"nombre":"ABAD NAVARRO, MARIA CRISTINA","dni":"32673205","total_creditos":6.2,"conceptos":[{"reduccion":"9020000 PRÁCTICAS","creditos":0.6},{"reduccion":"9010001 Dirección TFM","creditos":1.6},{"reduccion":"9010000 Dirección TFG","creditos":4.0}]},
+  "29773401":{"nombre":"MARTIN SAMPER, ROSARIO CARMEN","dni":"29773401","total_creditos":6.8,"conceptos":[{"reduccion":"9020000 PRÁCTICAS","creditos":0.6},{"reduccion":"9010001 Dirección TFM","creditos":3.2},{"reduccion":"9010000 Dirección TFG","creditos":3.0}]},
+  "28897282":{"nombre":"ZAMORA RAMIREZ, CONSTANCIO","dni":"28897282","total_creditos":7.0,"conceptos":[{"reduccion":"9020000 PRÁCTICAS","creditos":1.0},{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9010000 Dirección TFG","creditos":2.0}]},
+  "80134499":{"nombre":"FRESNEDA FUENTES, SILVIA","dni":"80134499","total_creditos":4.1,"conceptos":[{"reduccion":"9010001 Dirección TFM","creditos":1.6},{"reduccion":"9010000 Dirección TFG","creditos":2.5}]},
+  "75806587":{"nombre":"MORENO GARCIA, FRANCISCO J.","dni":"75806587","total_creditos":5.6,"conceptos":[{"reduccion":"9010001 Dirección TFM","creditos":1.6},{"reduccion":"9010000 Dirección TFG","creditos":4.0}]},
+  "77583191":{"nombre":"ESCOBAR PEREZ, BERNABE","dni":"77583191","total_creditos":2.93,"conceptos":[{"reduccion":"9010001 Dirección TFM","creditos":2.93}]},
+  "28689291":{"nombre":"LOPEZ HERRERA, DIEGO","dni":"28689291","total_creditos":6.1,"conceptos":[{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9050002 OTRAS PRÁCTICAS","creditos":0.6},{"reduccion":"9010000 Dirección TFG","creditos":1.5}]},
+  "28689194":{"nombre":"MORENO ROJAS, JOSE","dni":"28689194","total_creditos":4.5,"conceptos":[{"reduccion":"9010001 Dirección TFM","creditos":4.0},{"reduccion":"9010000 Dirección TFG","creditos":0.5}]},
+  "25991767":{"nombre":"TATO JIMENEZ, FRANCISCO JOSE","dni":"25991767","total_creditos":0.5,"conceptos":[{"reduccion":"9010000 Dirección TFG","creditos":0.5}]},
+  "76267490":{"nombre":"GALLEGO SOSA, CLARA","dni":"76267490","total_creditos":1.5,"conceptos":[{"reduccion":"9010000 Dirección TFG","creditos":1.5}]},
+  "29479248":{"nombre":"RICO IGLESIAS, JOSE MIGUEL","dni":"29479248","total_creditos":2.5,"conceptos":[{"reduccion":"9010000 Dirección TFG","creditos":2.5}]}
+};
+
+const MAX_CREDITOS = Math.max(...Object.values(DATOS).map(d => d.total_creditos));
+
+function formatNum(n) {
+  return n.toLocaleString('es-ES', {minimumFractionDigits: 0, maximumFractionDigits: 3});
+}
+
+function toTitleCase(str) {
+  return str.toLowerCase().replace(/(?:^|\s|-|,)\S/g, c => c.toUpperCase());
+}
+
+function parseCodigo(reduccion) {
+  const m = reduccion.match(/^(\d+)\s+(.+)$/);
+  if (m) return { cod: m[1], desc: m[2] };
+  return { cod: '', desc: reduccion };
+}
+
+function buscar() {
+  const raw = document.getElementById('dniInput').value.trim();
+  const errorDiv = document.getElementById('errorMsg');
+  const errorText = document.getElementById('errorText');
+  const resultCard = document.getElementById('resultCard');
+
+  errorDiv.style.display = 'none';
+
+  if (!raw) {
+    errorText.textContent = 'Por favor, introduce tu número de DNI.';
+    errorDiv.style.display = 'flex';
+    resultCard.style.display = 'none';
+    return;
+  }
+
+  const persona = DATOS[raw];
+
+  if (!persona) {
+    errorText.textContent = 'DNI "' + raw + '" no encontrado. Escribe solo los números, sin letra ni espacios.';
+    errorDiv.style.display = 'flex';
+    resultCard.style.display = 'none';
+    return;
+  }
+
+  errorDiv.style.display = 'none';
+  document.getElementById('btnLimpiar').style.display = 'block';
+  document.getElementById('rNombre').textContent = toTitleCase(persona.nombre);
+  document.getElementById('rDNI').textContent = persona.dni;
+
+  const totalEl = document.getElementById('rTotal');
+  totalEl.classList.remove('anim-num');
+  void totalEl.offsetWidth;
+  totalEl.textContent = formatNum(persona.total_creditos);
+  totalEl.classList.add('anim-num');
+
+  const container = document.getElementById('rTabla');
+  container.innerHTML = '';
+  persona.conceptos.forEach(c => {
+    const { cod, desc } = parseCodigo(c.reduccion);
+    const pct = Math.round((c.creditos / MAX_CREDITOS) * 100);
+    const div = document.createElement('div');
+    div.className = 'concepto-item';
+    div.innerHTML =
+      '<div class="concepto-desc">' +
+        (cod ? '<span class="cod-badge">' + cod + '</span>' : '') +
+        toTitleCase(desc) +
+      '</div>' +
+      '<div class="concepto-footer">' +
+        '<div class="bar-bg"><div class="bar-fill" style="width:' + pct + '%"></div></div>' +
+        '<span class="concepto-creditos">' + formatNum(c.creditos) + '</span>' +
+      '</div>';
+    container.appendChild(div);
+  });
+
+  resultCard.style.display = 'block';
+  setTimeout(() => resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+function limpiar() {
+  document.getElementById('dniInput').value = '';
+  document.getElementById('resultCard').style.display = 'none';
+  document.getElementById('errorMsg').style.display = 'none';
+  document.getElementById('btnLimpiar').style.display = 'none';
+  document.getElementById('dniInput').focus();
+}
+
+  document.getElementById('dniInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') buscar();
+  });
+  document.getElementById('btnBuscar').addEventListener('click', buscar);
+  document.getElementById('btnLimpiar').addEventListener('click', limpiar);
+}); // end DOMContentLoaded
+</script>
+</body>
+</html>
