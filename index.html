@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PAP · Dpto. Contabilidad y Economía Financiera</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf8f4;
+  --card: #ffffff;
+  --granate: #8b1a2b;
+  --granate-light: #a62639;
+  --dorado: #c19a3e;
+  --dorado-claro: #d4af5a;
+  --dorado-bg: #fdf5e6;
+  --oscuro: #1a1510;
+  --texto: #2d2820;
+  --gris: #8a8070;
+  --gris-claro: #e8e4dc;
+  --verde: #2d7a4f;
+  --verde-bg: #e8f5e9;
+  --rojo-val: #c0392b;
+  --sombra: rgba(139,26,43,0.08);
+  --radius: 16px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--texto);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== BACKGROUND PATTERN ===== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(139,26,43,0.04), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 90%, rgba(193,154,62,0.05), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===== HEADER ===== */
+header {
+  background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 40%, #3a1f15 100%);
+  padding: 20px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--granate), var(--dorado), var(--granate));
+}
+.logo { height: 60px; border-radius: 6px; flex-shrink: 0; }
+.header-text h1 {
+  font-family: 'DM Serif Display', serif;
+  color: #f5f0e8;
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+.header-text p {
+  color: var(--dorado-claro);
+  font-size: 0.72rem;
+  font-weight: 500;
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.badge {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: var(--dorado);
+  color: #1a0f0a;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: 0.06em;
+}
+
+/* ===== MAIN ===== */
+main {
+  position: relative; z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+/* ===== NOSCRIPT ===== */
+.noscript-warn {
+  background: #fef3cd;
+  border: 2px solid #f0c36d;
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #856404;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* ===== SEARCH CARD ===== */
+.search-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  box-shadow: 0 2px 12px var(--sombra), 0 0 0 1px rgba(0,0,0,0.03);
+}
+.search-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.2rem;
+  color: var(--oscuro);
+  margin-bottom: 4px;
+}
+.search-subtitle {
+  font-size: 0.82rem;
+  color: var(--gris);
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+}
+.dni-input {
+  flex: 1;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 12px 16px;
+  border: 2px solid var(--gris-claro);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--oscuro);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.08em;
+}
+.dni-input:focus {
+  border-color: var(--granate);
+  box-shadow: 0 0 0 3px rgba(139,26,43,0.1);
+}
+.dni-input::placeholder {
+  color: #b8b0a4;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.btn-buscar {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--granate), var(--granate-light));
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(139,26,43,0.25);
+}
+.btn-buscar:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(139,26,43,0.35); }
+.btn-buscar:active { transform: translateY(0); }
+
+.btn-limpiar {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 12px 14px;
+  border: 2px solid var(--gris-claro);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--gris);
+  cursor: pointer;
+  display: none;
+  transition: all 0.15s;
+}
+.btn-limpiar:hover { border-color: var(--granate); color: var(--granate); }
+
+/* Error */
+.error-box {
+  display: none;
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  color: #b91c1c;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.4;
+  align-items: flex-start;
+  gap: 8px;
+}
+.error-box svg { flex-shrink: 0; margin-top: 2px; }
+
+/* ===== RESULT SECTION ===== */
+.result-section {
+  display: none;
+  margin-top: 20px;
+  animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Person header */
+.person-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 2px 12px var(--sombra), 0 0 0 1px rgba(0,0,0,0.03);
+}
+.person-header {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--gris-claro);
+}
+.person-nombre {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem;
+  color: var(--oscuro);
+  line-height: 1.2;
+}
+.person-dni {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: var(--gris);
+  background: var(--bg);
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* ===== SUMMARY BOXES ===== */
+.summary-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 16px 20px;
+}
+.summary-box {
+  padding: 14px 16px;
+  border-radius: 12px;
+  text-align: center;
+}
+.summary-box.reducciones {
+  background: linear-gradient(135deg, rgba(139,26,43,0.06), rgba(139,26,43,0.02));
+  border: 1px solid rgba(139,26,43,0.1);
+}
+.summary-box.actividades {
+  background: linear-gradient(135deg, rgba(45,122,79,0.06), rgba(45,122,79,0.02));
+  border: 1px solid rgba(45,122,79,0.1);
+}
+.summary-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.summary-box.reducciones .summary-label { color: var(--granate); }
+.summary-box.actividades .summary-label { color: var(--verde); }
+.summary-value {
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+}
+.summary-box.reducciones .summary-value { color: var(--granate); }
+.summary-box.actividades .summary-value { color: var(--verde); }
+.summary-unit {
+  font-size: 0.68rem;
+  color: var(--gris);
+  font-weight: 500;
+  margin-top: 2px;
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; transform: scale(1); }
+}
+.anim { animation: popIn 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* ===== TABS ===== */
+.tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 20px;
+  border-bottom: 2px solid var(--gris-claro);
+}
+.tab {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 12px 18px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--gris);
+  position: relative;
+  transition: color 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tab:hover { color: var(--oscuro); }
+.tab.active { color: var(--granate); }
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 2.5px;
+  background: var(--granate);
+  border-radius: 2px 2px 0 0;
+}
+
+/* ===== TAB CONTENT ===== */
+.tab-content {
+  display: none;
+  padding: 16px 20px 20px;
+}
+.tab-content.active { display: block; }
+
+/* Section title */
+.section-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--gris);
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Concept items */
+.item {
+  padding: 11px 0;
+  border-bottom: 1px solid #f0efe9;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.item:last-child { border-bottom: none; }
+.item-desc {
+  font-size: 0.86rem;
+  color: var(--texto);
+  line-height: 1.35;
+}
+.item-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.bar-bg {
+  flex: 1;
+  height: 6px;
+  background: #e8e4dc;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.22,1,0.36,1);
+}
+.bar-fill.red { background: linear-gradient(90deg, var(--granate), var(--granate-light)); }
+.bar-fill.green { background: linear-gradient(90deg, var(--verde), #45a367); }
+.item-value {
+  font-weight: 800;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  min-width: 36px;
+  text-align: right;
+}
+.item-value.red { color: var(--granate); }
+.item-value.green { color: var(--verde); }
+
+.cod-badge {
+  display: inline-block;
+  background: var(--dorado-bg);
+  color: var(--dorado);
+  font-size: 0.64rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 4px;
+  margin-right: 5px;
+  font-family: monospace;
+}
+
+.empty-msg {
+  text-align: center;
+  color: var(--gris);
+  font-size: 0.85rem;
+  padding: 24px 0;
+  font-style: italic;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  color: var(--gris);
+  font-size: 0.7rem;
+  padding: 10px 16px 30px;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+footer strong { color: var(--dorado); }
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 500px) {
+  header { padding: 24px 28px; }
+  .logo { height: 72px; }
+  .header-text h1 { font-size: 1.5rem; }
+  main { padding: 32px 20px 48px; }
+  .search-card { padding: 28px 24px; }
+}
+@media (max-width: 380px) {
+  .input-row { flex-direction: column; }
+  .btn-buscar { justify-content: center; }
+  .summary-value { font-size: 1.6rem; }
+}
+</style>
+</head>
+<body>
+
+<noscript>
+<div class="noscript-warn">
+  <div style="font-size:1.4rem;margin-bottom:10px">⚠️ El botón no funciona aquí</div>
+  <div style="font-weight:400;font-size:0.85rem;line-height:1.6;text-align:left;max-width:400px;margin:0 auto">
+    WhatsApp, Gmail y otras apps abren una vista previa que <strong>bloquea</strong> el funcionamiento.<br><br>
+    <strong>📱 iPhone / iPad:</strong><br>
+    1. Pulsa el icono de compartir (↗) arriba a la derecha<br>
+    2. Elige <em>"Abrir en Safari"</em><br><br>
+    <strong>📱 Android:</strong><br>
+    1. Pulsa los 3 puntos (⋮) arriba a la derecha<br>
+    2. Elige <em>"Abrir en Chrome"</em> o <em>"Abrir en navegador"</em><br><br>
+    <strong>💻 Ordenador:</strong><br>
+    Guarda el archivo y ábrelo con doble clic.
+  </div>
+</div>
+</noscript>
+
+<header>
+  <img class="logo" src="data:image/png;base64,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" alt="Dpto. Contabilidad y Economía Financiera">
+  <div class="header-text">
+    <h1>Plan de Asignación de Profesorado</h1>
+    <p>Dpto. Contabilidad y Economía Financiera · US</p>
+  </div>
+  <div class="badge">2026–27</div>
+</header>
+
+<main>
+  <div class="search-card">
+    <div class="search-title">Consulta tu informe PAP</div>
+    <p class="search-subtitle">Introduce tu DNI (solo números, sin letra) para ver tus reducciones y actividades docentes asignadas.</p>
+
+    <div class="input-row">
+      <input type="tel" id="dniInput" class="dni-input" placeholder="Ej: 28567123" maxlength="12" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
+      <button class="btn-buscar" id="btnBuscar">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Consultar
+      </button>
+      <button class="btn-limpiar" id="btnLimpiar">✕</button>
+    </div>
+
+    <div class="error-box" id="errorBox">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="errorText"></span>
+    </div>
+  </div>
+
+  <div class="result-section" id="resultSection">
+    <div class="person-card">
+      <div class="person-header">
+        <div class="person-nombre" id="rNombre">—</div>
+        <div class="person-dni">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="12" y2="13"/></svg>
+          DNI: <span id="rDNI">—</span>
+        </div>
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-box reducciones">
+          <div class="summary-label">Reducción total</div>
+          <div class="summary-value anim" id="rTotalRed">0</div>
+          <div class="summary-unit">créditos</div>
+        </div>
+        <div class="summary-box actividades">
+          <div class="summary-label">Actividades</div>
+          <div class="summary-value anim" id="rTotalAct">0</div>
+          <div class="summary-unit">n.º actividades</div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="tab-red">Reducciones</button>
+        <button class="tab" data-tab="tab-act">Actividades</button>
+      </div>
+
+      <div class="tab-content active" id="tab-red">
+        <div class="section-title">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Desglose de reducciones
+        </div>
+        <div id="rReducciones"></div>
+      </div>
+
+      <div class="tab-content" id="tab-act">
+        <div class="section-title">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          Actividades docentes asignadas
+        </div>
+        <div id="rActividades"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <strong>Departamento de Contabilidad y Economía Financiera</strong> · Universidad de Sevilla<br>
+  Plan de Asignación de Profesorado (PAP) · Curso 2026–27
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+const D = {"15408573": {"n": "PEREZ SALGADO, MARIA", "d": "15408573", "tc": 0.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}], "act": [], "ta": 0}, "21457705": {"n": "RUIZ ALBERT, IGNACIO", "d": "21457705", "tc": 2.0, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9010000 Dirección TFG", "c": 1.5}], "act": [{"a": "TFG", "v": 3}], "ta": 3}, "25991767": {"n": "TATO JIMENEZ, FRANCISCO JOSE", "d": "25991767", "tc": 0.5, "con": [{"r": "9010000 Dirección TFG", "c": 0.5}], "act": [{"a": "TFG", "v": 1}], "ta": 1}, "27280333": {"n": "MARTIN LOZANO, FRANCISCO JAVIER", "d": "27280333", "tc": 2.0, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9000007 DOCENCIA EN INGLES", "c": 1.5}], "act": [], "ta": 0}, "27281752": {"n": "DUARTE ATOCHE, M. TERESA", "d": "27281752", "tc": 7.0, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 1.0}, {"r": "9020000 PRÁCTICAS", "c": 1.0}, {"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9010000 Dirección TFG", "c": 1.0}], "act": [{"a": "TFG", "v": 2}, {"a": "Práct. G", "v": 5}, {"a": "TFM MACS", "v": 1}, {"a": "TFM MUDIF", "v": 2}], "ta": 10}, "27286806": {"n": "VILLACHICA LOPEZ, MARIA ROSA", "d": "27286806", "tc": 1.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9010000 Dirección TFG", "c": 1.0}], "act": [{"a": "TFG", "v": 2}], "ta": 2}, "27300737": {"n": "NUÑEZ TORRADO, MIRIAM", "d": "27300737", "tc": 4.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 1.0}, {"r": "9000007 DOCENCIA EN INGLES", "c": 1.5}, {"r": "9020000 PRÁCTICAS", "c": 1.0}, {"r": "9010000 Dirección TFG", "c": 1.0}], "act": [{"a": "TFG", "v": 2}, {"a": "Práct. G", "v": 5}], "ta": 7}, "27303646": {"n": "MIRON MURCIANO, PEDRO JESUS", "d": "27303646", "tc": 0.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}], "act": [], "ta": 0}, "28567123": {"n": "CARRASCO GALLEGO, AMALIA", "d": "28567123", "tc": 12.5, "con": [{"r": "9000002 DIRECCIÓN TESIS", "c": 1.5}, {"r": "9000003 COORDINACIÓN MASTER", "c": 2.0}, {"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9050002 OTRAS PRÁCTICAS", "c": 1.0}, {"r": "9010000 Dirección TFG", "c": 3.5}], "act": [{"a": "TFG", "v": 7}, {"a": "TFM MACS", "v": 4}, {"a": "Práct. MACS", "v": 5}], "ta": 16}, "28572386": {"n": "DONOSO ANES, ALBERTO", "d": "28572386", "tc": 4.0, "con": [{"r": "9000009 DOCENCIA > 110", "c": 1.0}, {"r": "9010000 Dirección TFG", "c": 3.0}], "act": [{"a": "TFG", "v": 6}], "ta": 6}, "28583127": {"n": "DIAZ DE MAYORGA CORDON, CARLOS", "d": "28583127", "tc": 2.0, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9000009 DOCENCIA > 110", "c": 1.0}, {"r": "9010000 Dirección TFG", "c": 0.5}], "act": [{"a": "TFG", "v": 1}], "ta": 1}, "28597841": {"n": "SANCHEZ SUAREZ, ENRIQUE", "d": "28597841", "tc": 0.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}], "act": [], "ta": 0}, "28603766": {"n": "VIZCAINO FERNANDEZ, ANGELA", "d": "28603766", "tc": 1.0, "con": [{"r": "9000009 DOCENCIA > 110", "c": 1.0}], "act": [], "ta": 0}, "28639583": {"n": "BRAVO URQUIZA, FRANCISCO", "d": "28639583", "tc": 9.94, "con": [{"r": "9000007 DOCENCIA EN INGLES", "c": 3.0}, {"r": "9020000 PRÁCTICAS", "c": 0.6}, {"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9050002 OTRAS PRÁCTICAS", "c": 0.34}, {"r": "9010000 Dirección TFG", "c": 2.0}], "act": [{"a": "TFG", "v": 4}, {"a": "Práct. G", "v": 3}, {"a": "TFM MACS", "v": 1}, {"a": "TFM MAES", "v": 2}, {"a": "Práct. MAES", "v": 2}], "ta": 12}, "28689194": {"n": "MORENO ROJAS, JOSE", "d": "28689194", "tc": 4.5, "con": [{"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9010000 Dirección TFG", "c": 0.5}], "act": [{"a": "TFG", "v": 1}, {"a": "TFM MACS", "v": 3}, {"a": "TFM Cons", "v": 1}], "ta": 5}, "28689291": {"n": "LOPEZ HERRERA, DIEGO", "d": "28689291", "tc": 6.1, "con": [{"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9050002 OTRAS PRÁCTICAS", "c": 0.6}, {"r": "9010000 Dirección TFG", "c": 1.5}], "act": [{"a": "TFG", "v": 3}, {"a": "TFM MACS", "v": 2}, {"a": "TFM MUDIF", "v": 1}, {"a": "Práct MUDIF", "v": 3}], "ta": 9}, "28714386": {"n": "OÑATE RODRIGUEZ DE LA BORBOLLA, MYRIAM", "d": "28714386", "tc": 0.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}], "act": [], "ta": 0}, "28735051": {"n": "MUÑOZ RUBIO, ANA MARIA", "d": "28735051", "tc": 13.0, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9020000 PRÁCTICAS", "c": 0.8}, {"r": "9010001 Dirección TFM", "c": 3.2}, {"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9050002 OTRAS PRÁCTICAS", "c": 1.0}, {"r": "9010000 Dirección TFG", "c": 1.0}, {"r": "9010000 Dirección TFG", "c": 2.5}], "act": [{"a": "TFG", "v": 2}, {"a": "TFM MACS", "v": 2}], "ta": 4}, "28741805": {"n": "AGUSTI PEREZ, MARIA DE LAS AGUAS", "d": "28741805", "tc": 9.74, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9010001 Dirección TFM", "c": 2.4}, {"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9050002 OTRAS PRÁCTICAS", "c": 0.34}, {"r": "9010000 Dirección TFG", "c": 2.5}], "act": [{"a": "TFM MACS", "v": 1.5}], "ta": 1.5}, "28762482": {"n": "CONTRERAS MANRIQUE, MIGUEL", "d": "28762482", "tc": 4.0, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 1.0}, {"r": "9010000 Dirección TFG", "c": 3.0}], "act": [], "ta": 0}, "28885425": {"n": "SERRANO DOMINGUEZ, FRANCISCO", "d": "28885425", "tc": 9.4, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9020000 PRÁCTICAS", "c": 1.2}, {"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9050002 OTRAS PRÁCTICAS", "c": 0.2}, {"r": "9010000 Dirección TFG", "c": 3.5}], "act": [{"a": "TFG", "v": 7}, {"a": "Práct. G", "v": 6}, {"a": "TFM MACS", "v": 1}, {"a": "TFM Cons", "v": 4}, {"a": "Práct. ConsULTORIA", "v": 2}], "ta": 20}, "28886902": {"n": "OSTOS PEREZ, NURIA", "d": "28886902", "tc": 3.0, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9010000 Dirección TFG", "c": 2.5}], "act": [{"a": "TFG", "v": 5}], "ta": 5}, "28888673": {"n": "PEREZ LOPEZ, JOSE ANGEL", "d": "28888673", "tc": 19.65, "con": [{"r": "9000002 DIRECCIÓN TESIS", "c": 2.25}, {"r": "9000005 CARGO ACADÉMICO", "c": 12.0}, {"r": "9010001 Dirección TFM", "c": 2.4}, {"r": "9010000 Dirección TFG", "c": 3.0}], "act": [{"a": "TFG", "v": 6}, {"a": "TFM MUDIF", "v": 3}], "ta": 9}, "28897282": {"n": "ZAMORA RAMIREZ, CONSTANCIO", "d": "28897282", "tc": 7.0, "con": [{"r": "9020000 PRÁCTICAS", "c": 1.0}, {"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9010000 Dirección TFG", "c": 2.0}], "act": [{"a": "TFG", "v": 4}, {"a": "Práct. G", "v": 5}, {"a": "TFM MACS", "v": 4.5}], "ta": 13.5}, "28900759": {"n": "RUEDA TORRES, JUAN ANTONIO", "d": "28900759", "tc": 6.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9010000 Dirección TFG", "c": 2.0}], "act": [{"a": "TFG", "v": 4}, {"a": "TFM MACS", "v": 2}, {"a": "TFM MUDIF", "v": 3}], "ta": 9}, "28907173": {"n": "MUÑOZ USABIAGA, MARIA ARANZAZU", "d": "28907173", "tc": 3.5, "con": [{"r": "9000003 COORDINACIÓN MASTER", "c": 2.0}, {"r": "9000007 DOCENCIA EN INGLES", "c": 1.5}], "act": [{"a": "TFG", "v": 5}, {"a": "Práct. G", "v": 4}, {"a": "TFM MACS", "v": 3}, {"a": "Práct. MACS", "v": 5}], "ta": 17}, "28909933": {"n": "CAMPOS LUCENA, MARIA SOLEDAD", "d": "28909933", "tc": 4.3, "con": [{"r": "9000009 DOCENCIA > 110", "c": 1.0}, {"r": "9020000 PRÁCTICAS", "c": 0.8}, {"r": "9010000 Dirección TFG", "c": 2.5}], "act": [{"a": "TFG", "v": 5}, {"a": "Práct. G", "v": 4}], "ta": 9}, "28911422": {"n": "COLOMER HERNANDEZ, SEGISMUNDO", "d": "28911422", "tc": 0.825, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9000007 DOCENCIA EN INGLES", "c": 0.325}], "act": [], "ta": 0}, "28917016": {"n": "SORIANO MARTIN, ERNESTO", "d": "28917016", "tc": 1.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9000009 DOCENCIA > 110", "c": 1.0}], "act": [], "ta": 0}, "28921335": {"n": "GONZALEZ GONZALEZ, JOSE MARIA", "d": "28921335", "tc": 4.4, "con": [{"r": "9000009 DOCENCIA > 110", "c": 2.0}, {"r": "9050002 OTRAS PRÁCTICAS", "c": 0.4}, {"r": "9010000 Dirección TFG", "c": 2.0}], "act": [{"a": "TFG", "v": 4}, {"a": "Práct MUDIF", "v": 2}], "ta": 6}, "29479248": {"n": "RICO IGLESIAS, JOSE MIGUEL", "d": "29479248", "tc": 2.5, "con": [{"r": "9010000 Dirección TFG", "c": 2.5}], "act": [{"a": "TFG", "v": 5}], "ta": 5}, "29498195": {"n": "ALCAIDE, MARIA DOLORES", "d": "29498195", "tc": 2.0, "con": [{"r": "9000007 DOCENCIA EN INGLES", "c": 2.0}], "act": [{"a": "TFG", "v": 5}, {"a": "TFM MACS", "v": 1}, {"a": "TFM MUDIF", "v": 2}, {"a": "TFM MAES", "v": 2}, {"a": "Práct. MAES", "v": 2}], "ta": 12}, "29608770": {"n": "OLIVA RODRIGUEZ, LAURA", "d": "29608770", "tc": 2.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9010000 Dirección TFG", "c": 2.0}], "act": [{"a": "TFG", "v": 4}], "ta": 4}, "29758235": {"n": "ORTA PEREZ, MANUEL", "d": "29758235", "tc": 15.0, "con": [{"r": "9000000 DIRECCIÓN DEPARTAMENTO", "c": 5.0}, {"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9050002 OTRAS PRÁCTICAS", "c": 2.0}, {"r": "9010000 Dirección TFG", "c": 4.0}], "act": [{"a": "TFG", "v": 8}, {"a": "TFM MACS", "v": 5.5}, {"a": "Práct. MACS", "v": 10}], "ta": 23.5}, "29773401": {"n": "MARTIN SAMPER, ROSARIO CARMEN", "d": "29773401", "tc": 6.8, "con": [{"r": "9020000 PRÁCTICAS", "c": 0.6}, {"r": "9010001 Dirección TFM", "c": 3.2}, {"r": "9010000 Dirección TFG", "c": 3.0}], "act": [{"a": "TFG", "v": 6}, {"a": "Práct. G", "v": 3}, {"a": "TFM MUDIF", "v": 4}], "ta": 13}, "30224100": {"n": "DELGADO JIMENEZ, JOSE MANUEL", "d": "30224100", "tc": 3.0, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9010000 Dirección TFG", "c": 2.5}], "act": [{"a": "TFG", "v": 5}], "ta": 5}, "32673205": {"n": "ABAD NAVARRO, MARIA CRISTINA", "d": "32673205", "tc": 6.2, "con": [{"r": "9020000 PRÁCTICAS", "c": 0.6}, {"r": "9010001 Dirección TFM", "c": 1.6}, {"r": "9010000 Dirección TFG", "c": 4.0}], "act": [{"a": "TFG", "v": 8}, {"a": "Práct. G", "v": 3}, {"a": "TFM MACS", "v": 1}], "ta": 12}, "44035747": {"n": "VELEZ ELORZA, MARIA FERNANDA", "d": "44035747", "tc": 0.7, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9020000 PRÁCTICAS", "c": 0.2}], "act": [{"a": "Práct. G", "v": 1}], "ta": 1}, "44037538": {"n": "JULIA ACOSTA , JUSTO", "d": "44037538", "tc": 0.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}], "act": [], "ta": 0}, "45654774": {"n": "PEREZ LOPEZ, AURORA VIRGINIA", "d": "45654774", "tc": 4.85, "con": [{"r": "9000002 DIRECCIÓN TESIS", "c": 0.75}, {"r": "9000008 DOCENCIA > 65 < 110", "c": 1.0}, {"r": "9020000 PRÁCTICAS", "c": 0.6}, {"r": "9010000 Dirección TFG", "c": 2.5}], "act": [{"a": "TFG", "v": 5}, {"a": "Práct. G", "v": 3}], "ta": 8}, "48855589": {"n": "MONTERO BANCALERO, MARIA DEL CARMEN", "d": "48855589", "tc": 2.0, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9010000 Dirección TFG", "c": 1.5}], "act": [{"a": "TFG", "v": 3}], "ta": 3}, "49560296": {"n": "MORENO UREBA, ELENA", "d": "49560296", "tc": 3.6, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}, {"r": "9000007 DOCENCIA EN INGLES", "c": 1.5}, {"r": "9010001 Dirección TFM", "c": 1.6}], "act": [{"a": "TFM MACS", "v": 1}], "ta": 1}, "52221955": {"n": "REGUERA ALVARADO, NURIA", "d": "52221955", "tc": 12.45, "con": [{"r": "9000002 DIRECCIÓN TESIS", "c": 0.75}, {"r": "9000003 COORDINACIÓN MASTER", "c": 2.0}, {"r": "9000007 DOCENCIA EN INGLES", "c": 1.0}, {"r": "9020000 PRÁCTICAS", "c": 1.0}, {"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9050002 OTRAS PRÁCTICAS", "c": 0.2}, {"r": "9010000 Dirección TFG", "c": 3.5}], "act": [{"a": "TFG", "v": 7}, {"a": "Práct. G", "v": 5}, {"a": "TFM MACS", "v": 1}, {"a": "TFM MUDIF", "v": 3}, {"a": "Práct MUDIF", "v": 1}], "ta": 17}, "52262305": {"n": "FUENTES RUIZ, MARIA DEL PILAR DE", "d": "52262305", "tc": 3.5, "con": [{"r": "9000009 DOCENCIA > 110", "c": 2.0}, {"r": "9000007 DOCENCIA EN INGLES", "c": 1.5}], "act": [{"a": "TFG", "v": 6}], "ta": 6}, "52264378": {"n": "ARQUERO MONTAÑO, JOSE LUIS", "d": "52264378", "tc": 6.5, "con": [{"r": "9000005 CARGO ACADÉMICO", "c": 6.0}, {"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}], "act": [], "ta": 0}, "52287427": {"n": "HERNANDEZ BORREGUERO, JOSE JULIAN", "d": "52287427", "tc": 12.2, "con": [{"r": "9000001 SECRETARIO DEPERTAMENTO", "c": 2.0}, {"r": "9000008 DOCENCIA > 65 < 110", "c": 1.0}, {"r": "9010001 Dirección TFM", "c": 4.0}, {"r": "9050002 OTRAS PRÁCTICAS", "c": 1.2}, {"r": "9010000 Dirección TFG", "c": 4.0}], "act": [{"a": "TFG", "v": 8}, {"a": "TFM MACS", "v": 2.5}, {"a": "Práct. MACS", "v": 6}], "ta": 16.5}, "52567552": {"n": "VIOLETA SALIDO, MARIA ISABEL", "d": "52567552", "tc": 0.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 0.5}], "act": [], "ta": 0}, "52696922": {"n": "JIMENEZ JIMENEZ, CARLOS", "d": "52696922", "tc": 1.0, "con": [{"r": "9000009 DOCENCIA > 110", "c": 1.0}], "act": [], "ta": 0}, "75431952": {"n": "LOBO GALLARDO, ANTONIO", "d": "75431952", "tc": 3.0, "con": [{"r": "9000007 DOCENCIA EN INGLES", "c": 3.0}], "act": [], "ta": 0}, "75806587": {"n": "MORENO GARCIA, FRANCISCO J.", "d": "75806587", "tc": 5.6, "con": [{"r": "9010001 Dirección TFM", "c": 1.6}, {"r": "9010000 Dirección TFG", "c": 4.0}], "act": [{"a": "TFG", "v": 8}, {"a": "TFM MACS", "v": 1}], "ta": 9}, "76267490": {"n": "GALLEGO SOSA, CLARA", "d": "76267490", "tc": 1.5, "con": [{"r": "9010000 Dirección TFG", "c": 1.5}], "act": [{"a": "TFG", "v": 3}], "ta": 3}, "77583191": {"n": "ESCOBAR PEREZ, BERNABE", "d": "77583191", "tc": 2.93, "con": [{"r": "9010001 Dirección TFM", "c": 2.93}], "act": [{"a": "TFM MUDIF", "v": 2}, {"a": "TFM TUR", "v": 1}], "ta": 3}, "77813928": {"n": "MIRAS RODRIGUEZ, M. MAR", "d": "77813928", "tc": 5.465, "con": [{"r": "9000003 COORDINACIÓN MASTER", "c": 2.0}, {"r": "9000007 DOCENCIA EN INGLES", "c": 1.5}, {"r": "9020000 PRÁCTICAS", "c": 0.6}, {"r": "9010001 Dirección TFM", "c": 1.33}, {"r": "9050002 OTRAS PRÁCTICAS", "c": 0.035}], "act": [{"a": "Práct. G", "v": 3}, {"a": "TFM TUR", "v": 1}, {"a": "Práct. MASTER TUR", "v": 1}], "ta": 5}, "80134499": {"n": "FRESNEDA FUENTES, SILVIA", "d": "80134499", "tc": 4.1, "con": [{"r": "9010001 Dirección TFM", "c": 1.6}, {"r": "9010000 Dirección TFG", "c": 2.5}], "act": [{"a": "TFG", "v": 5}, {"a": "TFM MUDIF", "v": 2}], "ta": 7}, "8831074": {"n": "GARCIA AYUSO, MANUEL", "d": "8831074", "tc": 5.5, "con": [{"r": "9000008 DOCENCIA > 65 < 110", "c": 1.5}, {"r": "9010000 Dirección TFG", "c": 4.0}], "act": [{"a": "TFG", "v": 8}], "ta": 8}};
+
+const MAX_RED = Math.max(...Object.values(D).map(d => d.tc || 0));
+const MAX_ACT = Math.max(...Object.values(D).map(d => d.ta || 0));
+
+function fmt(n) {
+  return n.toLocaleString('es-ES', {minimumFractionDigits: 0, maximumFractionDigits: 3});
+}
+
+function titleCase(s) {
+  return s.toLowerCase().replace(/(?:^|\s|-|,)\S/g, c => c.toUpperCase());
+}
+
+function parseCod(r) {
+  var m = r.match(/^(\d+)\s+(.+)$/);
+  return m ? { cod: m[1], desc: m[2] } : { cod: '', desc: r };
+}
+
+// Tab logic
+document.querySelectorAll('.tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+    tab.classList.add('active');
+    document.getElementById(tab.getAttribute('data-tab')).classList.add('active');
+  });
+});
+
+function buscar() {
+  var raw = document.getElementById('dniInput').value.trim();
+  var errBox = document.getElementById('errorBox');
+  var errText = document.getElementById('errorText');
+  var res = document.getElementById('resultSection');
+
+  errBox.style.display = 'none';
+
+  if (!raw) {
+    errText.textContent = 'Por favor, introduce tu número de DNI.';
+    errBox.style.display = 'flex';
+    res.style.display = 'none';
+    return;
+  }
+
+  var p = D[raw];
+  if (!p) {
+    errText.textContent = 'DNI "' + raw + '" no encontrado. Escribe solo los números, sin letra ni espacios.';
+    errBox.style.display = 'flex';
+    res.style.display = 'none';
+    return;
+  }
+
+  errBox.style.display = 'none';
+  document.getElementById('btnLimpiar').style.display = 'block';
+  document.getElementById('rNombre').textContent = titleCase(p.n);
+  document.getElementById('rDNI').textContent = p.d;
+
+  // Animate summary values
+  var elRed = document.getElementById('rTotalRed');
+  var elAct = document.getElementById('rTotalAct');
+  elRed.classList.remove('anim'); elAct.classList.remove('anim');
+  void elRed.offsetWidth;
+  elRed.textContent = fmt(p.tc);
+  elAct.textContent = fmt(p.ta);
+  elRed.classList.add('anim'); elAct.classList.add('anim');
+
+  // Render reducciones
+  var redDiv = document.getElementById('rReducciones');
+  redDiv.innerHTML = '';
+  if (p.con.length === 0) {
+    redDiv.innerHTML = '<div class="empty-msg">Sin reducciones asignadas</div>';
+  } else {
+    p.con.forEach(function(c) {
+      var info = parseCod(c.r);
+      var pct = Math.round((c.c / MAX_RED) * 100);
+      var div = document.createElement('div');
+      div.className = 'item';
+      div.innerHTML = '<div class="item-desc">' +
+        (info.cod ? '<span class="cod-badge">' + info.cod + '</span>' : '') +
+        info.desc + '</div>' +
+        '<div class="item-footer">' +
+        '<div class="bar-bg"><div class="bar-fill red" style="width:' + pct + '%"></div></div>' +
+        '<div class="item-value red">' + fmt(c.c) + '</div>' +
+        '</div>';
+      redDiv.appendChild(div);
+    });
+  }
+
+  // Render actividades
+  var actDiv = document.getElementById('rActividades');
+  actDiv.innerHTML = '';
+  if (p.act.length === 0) {
+    actDiv.innerHTML = '<div class="empty-msg">Sin actividades docentes asignadas</div>';
+  } else {
+    p.act.forEach(function(a) {
+      var pct = Math.round((a.v / MAX_ACT) * 100);
+      var div = document.createElement('div');
+      div.className = 'item';
+      div.innerHTML = '<div class="item-desc">' + a.a + '</div>' +
+        '<div class="item-footer">' +
+        '<div class="bar-bg"><div class="bar-fill green" style="width:' + pct + '%"></div></div>' +
+        '<div class="item-value green">' + fmt(a.v) + '</div>' +
+        '</div>';
+      actDiv.appendChild(div);
+    });
+  }
+
+  // Reset to first tab
+  document.querySelectorAll('.tab')[0].click();
+  res.style.display = 'block';
+  res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function limpiar() {
+  document.getElementById('dniInput').value = '';
+  document.getElementById('resultSection').style.display = 'none';
+  document.getElementById('errorBox').style.display = 'none';
+  document.getElementById('btnLimpiar').style.display = 'none';
+  document.getElementById('dniInput').focus();
+}
+
+document.getElementById('btnBuscar').addEventListener('click', buscar);
+document.getElementById('btnLimpiar').addEventListener('click', limpiar);
+document.getElementById('dniInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') buscar();
+});
+
+});
+</script>
+</body>
+</html>
